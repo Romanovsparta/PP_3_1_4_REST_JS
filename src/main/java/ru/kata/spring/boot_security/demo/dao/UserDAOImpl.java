@@ -1,13 +1,13 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -15,6 +15,8 @@ public class UserDAOImpl implements UserDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<User> getAllUsers() {
         return entityManager.createQuery("SELECT user FROM User user", User.class).getResultList();
@@ -30,37 +32,32 @@ public class UserDAOImpl implements UserDAO {
 
     public void save(User user) {
         entityManager.persist(user);
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getRole() != null) {
-            List<Role> roles = new ArrayList<>();
-            if (user.getRole().toLowerCase().contains("admin")) {
-                roles.add(new Role(1, "ROLE_ADMIN"));
-            }
-            if (user.getRole().toLowerCase().contains("user")) {
-                roles.add(new Role(2, "ROLE_USER"));
-            }
-            user.setRoles(roles);
+            user.setRoles(listRoles(user));
         }
     }
 
     public void update(int id, User upUser) {
         entityManager.merge(upUser);
-        getUser(id).setPassword(new BCryptPasswordEncoder().encode(upUser.getPassword()));
+        getUser(id).setPassword(passwordEncoder.encode(upUser.getPassword()));
         if (upUser.getRole() != null) {
-            List<Role> roles = new ArrayList<>();
-            if (upUser.getRole().toLowerCase().contains("admin")) {
-                roles.add(new Role(1, "ROLE_ADMIN"));
-            }
-            if (upUser.getRole().toLowerCase().contains("user")) {
-                roles.add(new Role(2, "ROLE_USER"));
-            }
-            getUser(id).setRoles(roles);
-        } else {
-            getUser(id).setRoles(null);
+            getUser(id).setRoles(listRoles(upUser));
         }
     }
 
     public void delete(int id) {
         entityManager.remove(getUser(id));
+    }
+
+    private List<Role> listRoles(User user) {
+        List<Role> roles = new ArrayList<>();
+        if (user.getRole().toLowerCase().contains("admin")) {
+            roles.add(new Role(1, "ROLE_ADMIN"));
+        }
+        if (user.getRole().toLowerCase().contains("user")) {
+            roles.add(new Role(2, "ROLE_USER"));
+        }
+        return roles;
     }
 }

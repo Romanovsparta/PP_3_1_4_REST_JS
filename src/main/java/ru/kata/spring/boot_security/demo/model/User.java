@@ -26,11 +26,6 @@ public class User implements UserDetails {
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
     private List<Role> roles;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
-    }
-
     public String getStringRoles() {
         String stringRoles = "";
         if (roles != null) {
@@ -49,6 +44,11 @@ public class User implements UserDetails {
         } else {
             return role;
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
     }
 
     @Override
