@@ -14,7 +14,7 @@ public class Role implements GrantedAuthority {
     private int id;
     private String roleName;
     @Transient
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade=CascadeType.MERGE)
     private List<User> users;
 
     public Role(int id, String roleName) {

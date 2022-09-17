@@ -30,37 +30,27 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public User getUserByEmail(String email) {
-        return (User) entityManager.createQuery("FROM User user JOIN FETCH user.roles WHERE email = :email").setParameter("email", email).getSingleResult();
+        return (User) entityManager.createQuery("FROM User user JOIN FETCH user.roles WHERE user.email = :email").setParameter("email", email).getSingleResult();
     }
 
-    public void save(User user) {
-        entityManager.persist(user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getRole() != null) {
-            user.setRoles(listRoles(user));
+    public void saveOrUpdate(User user) {
+        int id = entityManager.merge(user).getId();
+        if (user.getPassword().length() > 0) {
+            getUser(id).setPassword(passwordEncoder.encode(user.getPassword()));
         }
-    }
-
-    public void update(int id, User upUser) {
-        entityManager.merge(upUser);
-        getUser(id).setPassword(passwordEncoder.encode(upUser.getPassword()));
-        if (upUser.getRole() != null) {
-            getUser(id).setRoles(listRoles(upUser));
+        if (user.getRole() != null) {
+            List<Role> roles = new ArrayList<>();
+            if (user.getRole().toLowerCase().contains("admin")) {
+                roles.add(new Role(1, "ROLE_ADMIN"));
+            }
+            if (user.getRole().toLowerCase().contains("user")) {
+                roles.add(new Role(2, "ROLE_USER"));
+            }
+            getUser(id).setRoles(roles);
         }
     }
 
     public void delete(int id) {
         entityManager.remove(getUser(id));
-    }
-
-    private List<Role> listRoles(User user) {
-        List<Role> roles = new ArrayList<>();
-        if (user.getRole().toLowerCase().contains("admin")) {
-            roles.add(new Role(1, "ROLE_ADMIN"));
-        }
-        if (user.getRole().toLowerCase().contains("user")) {
-            roles.add(new Role(2, "ROLE_USER"));
-        }
-        return roles;
     }
 }

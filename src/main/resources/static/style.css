@@ -27,3 +27,6 @@ label {
     max-width: 30%;
     margin: auto;
 }
+.form-group label {
+    font-weight: bold;
+}
