@@ -14,6 +14,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
+
     @Override
     @Transactional(readOnly=true)
     public List<User> getAllUsers() {
@@ -22,21 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly=true)
-    public User getUser(int id) {
-        return userDAO.getUser(id);
-    }
-
-    @Override
-    @Transactional(readOnly=true)
     public User getUserByEmail(String email) {
         return userDAO.getUserByEmail(email);
     }
-
-    /*@Override
-    @Transactional
-    public void saveOrUpdate(User user) {
-        userDAO.saveOrUpdate(user);
-    }*/
 
     @Override
     @Transactional

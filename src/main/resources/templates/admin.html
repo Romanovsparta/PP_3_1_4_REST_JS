@@ -25,10 +25,7 @@
 <div class="container-fluid">
     <header>
         <nav class="navbar fixed-top navbar-dark bg-dark">
-            <span class="navbar-brand">
-                <b th:text="${admin.getUsername()}"> VALUE </b> with roles:
-                <span th:text="${admin.getStringRoles()}"> VALUE </span>
-            </span>
+            <span class="navbar-brand"></span>
             <span class="navbar-text">
                 <form th:action="@{/logout}" method="POST">
                     <button type="submit" class="btn btn-dark">Logout</button>
@@ -64,7 +61,7 @@
                         <h1> Admin panel </h1>
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#tab1" data-toggle="tab" id="users-table">
+                                <a class="nav-link active" href="#tab1" data-toggle="tab" id="usersTable">
                                     Users table
                                 </a>
                             </li>
@@ -237,7 +234,7 @@
                                         <!-- Форма Add new user -->
                                         <div class="container">
                                             <div class="text-center">
-                                                <form id="add-new-user">
+                                                <form id="addUserForm">
                                                     <div class="form-group">
                                                         <label>First name</label>
                                                         <input type="text" id="newFirstName" class="form-control"
@@ -308,16 +305,7 @@
                                         <th>Role</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><p th:text="${admin.getId()}">VALUE</p></td>
-                                        <td><p th:text="${admin.getFirstName()}">VALUE</p></td>
-                                        <td><p th:text="${admin.getLastName()}">VALUE</p></td>
-                                        <td><p th:text="${admin.getAge()}">VALUE</p></td>
-                                        <td><p th:text="${admin.getUsername()}">VALUE</p></td>
-                                        <td><p th:text="${admin.getStringRoles()}">VALUE</p></td>
-                                    </tr>
-                                    </tbody>
+                                    <tbody id="adminInfo"></tbody>
                                 </table>
                                 <!-- Конец таблицы юзер -->
                             </div>
@@ -360,7 +348,7 @@
                                         <td><p th:text="${admin.getLastName()}">VALUE</p></td>
                                         <td><p th:text="${admin.getAge()}">VALUE</p></td>
                                         <td><p th:text="${admin.getUsername()}">VALUE</p></td>
-                                        <td><p th:text="${admin.getStringRoles()}">VALUE</p></td>
+                                        <td><p th:text="${admin.getRole()}">VALUE</p></td>
                                     </tr>
                                     </tbody>
                                 </table>

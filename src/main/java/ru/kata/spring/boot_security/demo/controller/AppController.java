@@ -4,10 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping
@@ -23,8 +21,7 @@ public class AppController {
     }
 
     @GetMapping("/admin")
-    public String admin(Model model, Principal principal) {
-        model.addAttribute("admin", us.getUserByEmail(principal.getName()));
+    public String admin() {
         return "admin";
     }
 

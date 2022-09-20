@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
     List<User> getAllUsers();
-    User getUser(int id);
     User getUserByEmail(String email);
     //void saveOrUpdate(User user);
     void delete(int id);

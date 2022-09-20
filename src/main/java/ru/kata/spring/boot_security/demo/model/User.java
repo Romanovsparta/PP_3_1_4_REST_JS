@@ -34,29 +34,9 @@ public class User implements UserDetails {
         return email;
     }
 
-    public String getStringRoles() {
-        String stringRoles = "";
-        if (roles != null) {
-            for (Role role : roles) {
-                stringRoles += " " + role.getRoleName();
-            }
-            return stringRoles.trim().replace("ROLE_", "");
-        } else {
-            return null;
-        }
-    }
-
-    public String getRole() {
-        if (role != null) {
-            return role.toUpperCase();
-        } else {
-            return role;
-        }
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles != null ? roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList()) : null;
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
     }
 
     @Override
