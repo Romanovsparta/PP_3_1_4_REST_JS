@@ -34,13 +34,14 @@ public class RestControllerForAdmin {
     @PostMapping
     @CrossOrigin(origins = "*")
     public User save(@RequestBody User user) {
-        us.saveOrUpdate(user);
+        us.save(user);
         return user;
     }
 
     @PutMapping
+    @CrossOrigin(origins = "*")
     public String update(@RequestBody User user) {
-        us.saveOrUpdate(user);
+        us.update(user);
         return "user";
     }
 

@@ -26,14 +26,15 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public User getUser(int id) {
-        return (User) entityManager.createQuery("FROM User WHERE id = :id").setParameter("id", id).getSingleResult();
+        return entityManager.find(User.class, id);
+        //return (User) entityManager.createQuery("FROM User WHERE id = :id").setParameter("id", id).getSingleResult();
     }
 
     public User getUserByEmail(String email) {
         return (User) entityManager.createQuery("FROM User user JOIN FETCH user.roles WHERE user.email = :email").setParameter("email", email).getSingleResult();
     }
 
-    public void saveOrUpdate(User user) {
+/*    public void saveOrUpdate(User user) {
         int id = entityManager.merge(user).getId();
         if (user.getPassword().length() > 0) {
             getUser(id).setPassword(passwordEncoder.encode(user.getPassword()));
@@ -48,9 +49,39 @@ public class UserDAOImpl implements UserDAO {
             }
             getUser(id).setRoles(roles);
         }
+    }*/
+
+    public void save(User user) {
+        entityManager.persist(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() != null) {
+            user.setRoles(listRoles(user));
+        }
+    }
+
+    public void update(User upUser) {
+        int id = entityManager.merge(upUser).getId();
+        if (upUser.getPassword().length() > 0) {
+            getUser(id).setPassword(passwordEncoder.encode(upUser.getPassword()));
+        }
+        if (upUser.getRole() != null) {
+            getUser(id).setRoles(listRoles(upUser));
+        }
+    }
+
+    private List<Role> listRoles(User user) {
+        List<Role> roles = new ArrayList<>();
+        if (user.getRole().toLowerCase().contains("admin")) {
+            roles.add(new Role(1, "ROLE_ADMIN"));
+        }
+        if (user.getRole().toLowerCase().contains("user")) {
+            roles.add(new Role(2, "ROLE_USER"));
+        }
+        return roles;
     }
 
     public void delete(int id) {
+        //entityManager.createQuery("DELETE User WHERE id = :id").setParameter("id", id).executeUpdate();
         entityManager.remove(getUser(id));
     }
 }

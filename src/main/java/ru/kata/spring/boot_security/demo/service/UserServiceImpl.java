@@ -32,10 +32,22 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUserByEmail(email);
     }
 
-    @Override
+    /*@Override
     @Transactional
     public void saveOrUpdate(User user) {
         userDAO.saveOrUpdate(user);
+    }*/
+
+    @Override
+    @Transactional
+    public void save(User user) {
+        userDAO.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void update(User upUser) {
+        userDAO.update(upUser);
     }
 
     @Override
