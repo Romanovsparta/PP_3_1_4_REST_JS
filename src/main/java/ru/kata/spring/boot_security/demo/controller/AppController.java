@@ -1,11 +1,9 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import java.security.Principal;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping
@@ -26,13 +24,12 @@ public class AppController {
     }
 
     @GetMapping("/user")
-    public String user(Model model, Principal principal) {
-        model.addAttribute("admin", us.getUserByEmail(principal.getName()));
+    public String user() {
         return "admin";
     }
 
     @GetMapping("/login")
-    public RedirectView redirectWithUsingRedirectView() {
+    public RedirectView redirect() {
         return new RedirectView("/");
     }
 }
